@@ -1,5 +1,6 @@
 package bootstrap;
 
+import domain.linkedList.lNode;
 import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
@@ -24,6 +25,15 @@ public class Driver {
             logger.info(SEPARATOR);
             System.out.println(" Project properties are loaded. Log file generated for this run = " + logFilePath);
             projectProperties = getProjectProperties(args[1]);
+
+            lNode<Integer> node = new lNode(5);
+
+            lNode<Integer> secondNode = new lNode(10);
+            node.setNext(secondNode);
+
+            logger.info("First node = " + node.toString());
+            logger.info("Second node = " + secondNode.toString());
+
             logger.info(SEPARATOR);
         } catch (IOException io) {
             logger.error("Error while reading the project properties file.", io);
