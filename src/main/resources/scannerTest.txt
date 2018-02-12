@@ -1,0 +1,2 @@
+This is the first line for scanner to read.
+This is the second line for scanner to read.
