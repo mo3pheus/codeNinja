@@ -4,6 +4,7 @@ public class BNode {
     Integer data;
     BNode   right;
     BNode   left;
+    BNode   parent;
 
     public Integer getData() {
         return data;
@@ -19,6 +20,7 @@ public class BNode {
 
     public void setRight(BNode right) {
         this.right = right;
+        this.right.setParent(this);
     }
 
     public BNode getLeft() {
@@ -27,15 +29,25 @@ public class BNode {
 
     public void setLeft(BNode left) {
         this.left = left;
+        this.left.setParent(this);
     }
 
     public BNode(Integer data) {
         this.data = data;
         this.right = null;
         this.left = null;
+        this.parent = null;
     }
 
     public boolean isLeafNode() {
         return right == null && left == null;
+    }
+
+    public BNode getParent() {
+        return parent;
+    }
+
+    public void setParent(BNode parent) {
+        this.parent = parent;
     }
 }
