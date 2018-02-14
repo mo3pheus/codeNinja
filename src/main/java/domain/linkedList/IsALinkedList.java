@@ -19,4 +19,6 @@ public interface IsALinkedList<T> {
     void clear();
 
     lNode find(T data);
+
+    void insertAtPosition(T data, int position);
 }

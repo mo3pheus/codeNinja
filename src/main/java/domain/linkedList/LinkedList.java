@@ -51,7 +51,6 @@ public class LinkedList<T> implements IsALinkedList<T> {
 
         if (head.getData().equals(data)) {
             if (head.getNext() != null) {
-                lNode temp = head;
                 head = head.getNext();
             } else {
                 head = null;
@@ -115,5 +114,47 @@ public class LinkedList<T> implements IsALinkedList<T> {
             temp = temp.getNext();
         }
         return temp;
+    }
+
+    @Override
+    public String toString() {
+        String content = "";
+
+        if (head == null) {
+            return null;
+        } else {
+            lNode temp = head;
+            while (temp != null) {
+                content += temp.data + " ";
+                temp = temp.getNext();
+            }
+
+            return content;
+        }
+    }
+
+    @Override
+    public void insertAtPosition(T data, int position) throws NullPointerException {
+        int i = 0;
+
+        if (head == null && i == 0) {
+            head = new lNode(data);
+        } else if (head != null && position == 0) {
+            lNode tempHead = head;
+            lNode newHead = new lNode(data);
+            newHead.setNext(tempHead);
+            head = newHead;
+        } else {
+            lNode temp = head;
+            while (i != position - 1) {
+                temp = temp.getNext();
+                i++;
+            }
+
+            lNode nextNode        = temp.getNext();
+            lNode replacementNode = new lNode(data);
+            replacementNode.setNext(nextNode);
+            temp.setNext(replacementNode);
+        }
     }
 }

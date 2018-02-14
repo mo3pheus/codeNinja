@@ -62,10 +62,12 @@ public class LinkedListTest extends TestCase {
     @Test
     public void testClear() {
         setUpLinkedList();
+        System.out.println(linkedList.toString());
+        assertTrue(linkedList.toString().equals("4.0 5.0 6.0 7.0 "));
         linkedList.clear();
+        assertTrue(linkedList.toString() == null);
         assertTrue(linkedList.isEmpty());
     }
-
 
     @Test
     public void testCyclicLinkedList() {
@@ -75,6 +77,22 @@ public class LinkedListTest extends TestCase {
         linkedList.clear();
         setUpLinkedList();
         assertFalse(isCyclic(linkedList));
+    }
+
+    @Test
+    public void testInsertAtPosition() {
+        setUpLinkedList();
+        assertTrue(linkedList.toString().equals("4.0 5.0 6.0 7.0 "));
+        linkedList.insertAtPosition(5.0, 0);
+        assertTrue(linkedList.toString().equals("5.0 4.0 5.0 6.0 7.0 "));
+        linkedList.insertAtPosition(-2.0, 2);
+        assertTrue(linkedList.toString().equals("5.0 4.0 -2.0 5.0 6.0 7.0 "));
+
+        try {
+            linkedList.insertAtPosition(-3.0, 100);
+        } catch (NullPointerException n) {
+            assertTrue(linkedList.toString().equals("5.0 4.0 -2.0 5.0 6.0 7.0 "));
+        }
     }
 
     private boolean isCyclic(IsALinkedList linkedList) {
