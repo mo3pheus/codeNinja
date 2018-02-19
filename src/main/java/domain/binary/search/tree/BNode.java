@@ -20,7 +20,9 @@ public class BNode {
 
     public void setRight(BNode right) {
         this.right = right;
-        this.right.setParent(this);
+        if (right != null) {
+            this.right.setParent(this);
+        }
     }
 
     public BNode getLeft() {
@@ -29,7 +31,9 @@ public class BNode {
 
     public void setLeft(BNode left) {
         this.left = left;
-        this.left.setParent(this);
+        if (left != null) {
+            this.left.setParent(this);
+        }
     }
 
     public BNode(Integer data) {

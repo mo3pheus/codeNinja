@@ -1,92 +1,80 @@
 package domain.binary.search.tree;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class BinarySearchTree implements IsABST {
-    Logger logger = LoggerFactory.getLogger(BinarySearchTree.class);
-    BNode root;
+    public BNode root = null;
 
     @Override
     public BNode find(Integer data) {
-        return find(data, root);
-    }
-
-    private BNode find(Integer data, BNode node) {
-        if (node == null || node.getData() == data) {
-            return node;
-        } else if (data > node.getData()) {
-            return find(data, node.getRight());
-        } else {
-            return find(data, node.getLeft());
+        if (root == null) {
+            return null;
         }
+
+        BNode temp = root;
+        while (temp != null && temp.getData() != data) {
+            if (data < temp.getData()) {
+                temp = temp.getLeft();
+            } else {
+                temp = temp.getRight();
+            }
+        }
+        return temp;
     }
 
     @Override
     public BNode deleteNode(Integer data) {
-        logger.info("Trying to delete node = " + data);
-        return deleteNode(data, root);
-    }
-
-    private BNode deleteNode(Integer data, BNode node) {
-        if (node == null) {
-            logger.error("Data " + data + " not present in tree.");
+        BNode nodeToDelete = find(data);
+        if (nodeToDelete == null) {
             return null;
-        } else if (root.getData() == data) {
-            BNode temp = new BNode(data);
-            temp.setRight(root.getRight());
-            temp.setLeft(root.getLeft());
+        }
 
-            if (root.isLeafNode()) {
+        if (root.getData() == data) {
+            if (isLeaf(root)) {
                 root = null;
-            } else if (root.getRight() != null && root.getLeft() != null) {
-                Integer tempVal = findLeftMost(root.getRight()).getData();
-                deleteNode(tempVal, root.getRight());
-                root.setData(tempVal);
-            } else if (root.getLeft() == null) {
-                root = root.getRight();
             } else {
-                root = root.getLeft();
+                BNode leftMost = findLeftMost(root.getRight());
+                root.setData(leftMost.getData());
+                deleteNode(leftMost.getParent(), leftMost.getData());
             }
-
-            return temp;
-        }
-
-        if (node.getData() == data) {
-            BNode parent = node.getParent();
-            if (node.isLeafNode()) {
-                deleteChild(parent, data);
-                return node;
-            } else if (node.getRight() != null && node.getLeft() != null) {
-                BNode replacementNode = findLeftMost(node.getRight());
-                node.setData(replacementNode.getData());
-                return deleteNode(data, node.getRight());
-            } else if (node.getRight() != null) {
-                if (node.getRight().getData() > parent.getData()) {
-                    parent.setRight(node.getRight());
-                } else {
-                    parent.setLeft(node.getLeft());
-                }
-                return node;
-            } else if (node.getLeft() != null) {
-                parent.setLeft(node.getLeft());
-                return node;
-            }
-        } else if (data < node.getData()) {
-            return deleteNode(data, node.getLeft());
         } else {
-            return deleteNode(data, node.getRight());
+            BNode parent = nodeToDelete.getParent();
+            deleteNode(parent, data);
         }
-
-        return null;
+        return nodeToDelete;
     }
 
-    private void deleteChild(BNode node, Integer data) {
-        if (node.getRight().getData() == data) {
-            node.setRight(null);
-        } else if (node.getLeft().getData() == data) {
-            node.setLeft(null);
+    private void deleteNode(BNode parent, Integer data) {
+        BNode nodeToDelete = null;
+        if (parent.getLeft().getData() == data) {
+            nodeToDelete = parent.getLeft();
+            if (isLeaf(nodeToDelete)) {
+                parent.setLeft(null);
+            } else if (nodeToDelete.getLeft() != null && nodeToDelete.getRight() != null) {
+                BNode leftMostChild = findLeftMost(nodeToDelete.getRight());
+                parent.getLeft().setData(leftMostChild.getData());
+                deleteNode(leftMostChild.getParent(), leftMostChild.getData());
+            } else if (nodeToDelete.getRight() != null) {
+                parent.setLeft(nodeToDelete.getRight());
+            } else {
+                parent.setLeft(nodeToDelete.getLeft());
+            }
+        } else {
+            nodeToDelete = parent.getRight();
+            if (isLeaf(nodeToDelete)) {
+                parent.setRight(null);
+            } else if (nodeToDelete.getLeft() != null && nodeToDelete.getRight() != null) {
+                BNode leftMostChild = findLeftMost(nodeToDelete.getRight());
+                parent.getRight().setData(leftMostChild.getData());
+                deleteNode(leftMostChild.getParent(), leftMostChild.getData());
+            } else if (nodeToDelete.getRight() != null) {
+                parent.setRight(nodeToDelete.getRight());
+            } else {
+                parent.setRight(nodeToDelete.getLeft());
+            }
         }
+    }
+
+    public boolean isLeaf(BNode node) {
+        return node.getLeft() == null && node.getRight() == null;
     }
 
     @Override
@@ -100,28 +88,70 @@ public class BinarySearchTree implements IsABST {
 
     @Override
     public void add(Integer data) {
-        logger.info("Adding new element = " + data);
         if (root == null) {
             root = new BNode(data);
         } else {
-            add(root, data);
+            add(data, root);
         }
     }
 
-    private void add(BNode tempRoot, Integer data) {
-        if (data > tempRoot.getData()) {
-            if (tempRoot.getRight() == null) {
-                tempRoot.setRight(new BNode(data));
+    private void add(Integer data, BNode node) {
+        if (data < node.getData()) {
+            if (node.getLeft() == null) {
+                node.setLeft(new BNode(data));
             } else {
-                add(tempRoot.getRight(), data);
+                add(data, node.getLeft());
             }
-        } else {
-            if (tempRoot.getLeft() == null) {
-                tempRoot.setLeft(new BNode(data));
+        } else if (data > node.getData()) {
+            if (node.getRight() == null) {
+                node.setRight(new BNode(data));
             } else {
-                add(tempRoot.getLeft(), data);
+                add(data, node.getRight());
             }
         }
+    }
+
+    public void printInOrder() {
+        printInOrder(root);
+    }
+
+    private void printInOrder(BNode root) {
+        if (root == null) {
+            return;
+        }
+
+        printInOrder(root.getLeft());
+        System.out.println(root.getData());
+        printInOrder(root.getRight());
+    }
+
+    public void printPostOrder() {
+        printInOrder(root);
+    }
+
+    private void printPostOrder(BNode root) {
+        if (root == null) {
+            return;
+        }
+
+        printInOrder(root.getLeft());
+        System.out.println(root.getData());
+        printPostOrder(root.getRight());
+    }
+
+
+    public void printPreOrder() {
+        printPreOrder(root);
+    }
+
+    private void printPreOrder(BNode root) {
+        if (root == null) {
+            return;
+        }
+
+        printPreOrder(root.getLeft());
+        printPreOrder(root.getRight());
+        System.out.println(root.getData());
     }
 
     public BNode getRoot() {
@@ -130,9 +160,5 @@ public class BinarySearchTree implements IsABST {
 
     public void setRoot(BNode root) {
         this.root = root;
-    }
-
-    public BinarySearchTree() {
-        root = null;
     }
 }
