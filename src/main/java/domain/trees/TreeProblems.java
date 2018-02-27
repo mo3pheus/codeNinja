@@ -1,4 +1,4 @@
-package domain.misc;
+package domain.trees;
 
 import domain.binary.search.tree.BNode;
 import domain.binary.search.tree.BinarySearchTree;
