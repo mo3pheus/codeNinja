@@ -4,13 +4,22 @@ public class LinkedList<T> implements IsALinkedList<T> {
     private lNode<T> head;
 
     @Override
-    public void add(Object data) {
+    public void add(T data) {
         if (head == null) {
             head = new lNode(data);
         } else {
             lNode tail = findTail();
             lNode temp = new lNode(data);
             tail.setNext(temp);
+        }
+    }
+
+    public void add(lNode dataNode) {
+        if (head == null) {
+            head = dataNode;
+        } else {
+            lNode tail = findTail();
+            tail.setNext(dataNode);
         }
     }
 
@@ -141,7 +150,7 @@ public class LinkedList<T> implements IsALinkedList<T> {
             head = new lNode(data);
         } else if (head != null && position == 0) {
             lNode tempHead = head;
-            lNode newHead = new lNode(data);
+            lNode newHead  = new lNode(data);
             newHead.setNext(tempHead);
             head = newHead;
         } else {

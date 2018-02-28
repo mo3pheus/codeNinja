@@ -1,8 +1,9 @@
 package domain.linkedList;
 
 public class lNode<T> {
-    T     data;
-    lNode next;
+    T       data;
+    lNode   next;
+    boolean flag;
 
     public T getData() {
         return data;
@@ -23,6 +24,14 @@ public class lNode<T> {
     public lNode(T data) {
         this.data = data;
         this.next = null;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
     public String toString() {
