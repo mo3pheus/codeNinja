@@ -38,13 +38,15 @@ public class CrackPasswords {
 
     static boolean isValidPassword(String[] loginAttempt, int index, lNode password) {
         // last char
-        if (index == (loginAttempt.length - 1)){
-            if(password.isFlag() && loginAttempt[index].equals(password.getData())){
+        if (index == (loginAttempt.length - 1) && password.isFlag() && loginAttempt[index].equals(password.getData())) {
             return true;
-            } else{
-                return isValidPassword(loginAttempt, index+1,password.getNext());
-            }
+        } else {
+            return false;
         }
+
+
+        // else continue evaluating password
+        // handle end of password to switch to new root 
     }
 
 
