@@ -23,6 +23,7 @@ public class MergeSort {
             temp[k++] = a[j++];
         }
 
+        //put it back in a in sorted order.
         for (i = left; i <= right; i++) {
             a[i] = temp[i - left];
         }
