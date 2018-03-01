@@ -43,4 +43,12 @@ public class Trie {
         }
         return false;
     }
+
+    public TrieNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TrieNode root) {
+        this.root = root;
+    }
 }
